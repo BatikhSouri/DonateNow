@@ -10,10 +10,11 @@ var Project = new Schema({
 });
 
 var Donation = new Schema({
-	writerId: Number
+	writerId: Number,
 	donorNumber: Number,
 	projectNumber: Number,
-	shares: Number
+	shares: Number,
+	total: Number
 });
 
 var Writer = new Schema({
@@ -22,9 +23,10 @@ var Writer = new Schema({
 	password: String
 });
 
-mongoose.model('Project', Project);
-mongoose.model('Donation', Donation);
-mongoose.model('Writer', Writer);
+var Session = new Schema({
+	sessionId: String,
+	writerId: Number
+});
 
 var connectionString = 'mongodb://';
 if (config.user && config.pass){
@@ -36,7 +38,12 @@ mongoose.connect(connectionString, function(err){
 	if (err) throw err;
 })
 
-mongoose.on('error', console.error.bind(console, 'Connection error:'));
-mongoose.once('open', function(){
+mongoose.model('Project', Project);
+mongoose.model('Donation', Donation);
+mongoose.model('Writer', Writer);
+mongoose.model('Session', Session);
+
+mongoose.connection.on('error', console.error.bind(console, 'Connection error:'));
+mongoose.connection.once('open', function(){
 	console.log('Connection to DB established');
 });

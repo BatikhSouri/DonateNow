@@ -1,7 +1,66 @@
 extends layout
 
 block content
+	#alert.alert.alert-dismissable(style="display: none")
+		button.close(type="button", data-dismiss="alert", aria-hideen="true") &times;
+		span#alertContent
 	form(role='form')
 		.form-group
-			label() Numéro de donateur
-			#input(type='number')
+			label(for='project') Projet
+			select#selectedProject.form-control
+				- for project in projects
+					option #{project.name} (#{project.shareSize} #{project.currency}/action)
+		.form-group
+			label(for='donorNumber') Numéro de donateur
+			input#donorNumber.form-control(type='number')
+		.form-group
+			label(for='numShares') Nombre d'actions
+			input#numShares.form-control(type='number')
+		button#saveDonation.btn.btn-primary.btn-large Sauvegarder
+	script.
+		var saveButton = document.getElementById('saveDonation');
+		saveButton.onclick = function(e){
+			e.preventDefault();
+			var projectNumber = selectedProject.selectedIndex;
+			var donorNumber = document.getElementById('donorNumber').value;
+			donorNumber = Number(donorNumber)
+			if (Number.isNaN(donorNumber) || donorNumber == 0 || Math.round(donorNumber) != donorNumber){
+				showAlert('alert-danger', '<strong>Erreur : </strong>Le numéro de donneur doit être un nombre', 1500);
+				return;
+			}
+			var numShares = document.getElementById('numShares').value;
+			numShares = Number(numShares);
+			if (Number.isNaN(numShares) || numShares <= 0){
+				showAlert('alert-danger', '<strong>Erreur : </strong>Le nombre d\'action entré est invalide', 1500);
+				return;
+			}
+			//Building the ajax request
+			var req = new XMLHttpRequest();
+			var data = new FormData();
+			data.append('projectNumber', projectNumber);
+			data.append('donorNumber', donorNumber);
+			data.append('numShares', numShares);
+			req.open('POST', '/donation');
+			req.onload = function(){
+				if (this.status === 200){
+					showAlert('alert-success', 'La donation a été enregistrée', 1500);
+				} else {
+					showAlert('alert-danger', 'Erreur lors de l\'enregistrement de la donation', 1500);
+				}
+			};
+			req.send(data);
+		};
+		var alertElement = document.getElementById('alert');
+		var alertContent = document.getElementById('alertContent');
+		function showAlert(alertClass, message, dismissTime){
+			if (!(alertClass == 'alert-success' || alertClass == 'alert-info' || alertClass == 'alert-warning' || alertClass == 'alert-danger')) return;
+			$('#alert').removeClass('alert-success alert-info alert-warning alert-danger');
+			$('#alert').addClass(alertClass);
+			alertContent.innerHTML = message;
+			$('#alert').show();
+			if (dismissTime && typeof dismissTime == 'number' && dismissTime > 0){
+				setTimeout(function(){
+					$('#alert').fadeOut(600);
+				}, dismissTime);
+			}
+		}
