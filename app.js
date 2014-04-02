@@ -6,10 +6,10 @@
 var express = require('express');
 var dbmodels = require('./dbmodels');
 var routes = require('./routes');
-var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var config = require('./config');
+var io = require('socket.io');
 
 var app = express();
 
@@ -34,11 +34,18 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+routes.ondonation = function(projectNumber, shares, total){
+	io.sockets.emit('donation', {projectNumber: projectNumber, shares: shares, total: total});
+};
+
 app.get('/', routes.index);
 app.get('/donation', routes.donationPage);
 app.post('/donation', routes.saveDonation);
-app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app);
+io = io.listen(server);
+io.set('log level', 1);
+
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

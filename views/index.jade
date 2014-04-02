@@ -1,5 +1,30 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	h1 Projets de #{beneficiaryName}
+	#projectList.row(style="margin-top: 40px")
+		- for project in projects
+			.col-md-3.projectcolumn
+				h3.center #{project.name}
+				div.counter.large #{project.total}
+				div.center(style="font-size: 24px") #{project.currency}
+				div.center(style="margin-top: 30px; font-size: 24px") Nombre d'actions :
+				div.counter #{project.numShares}
+	script(src="/socket.io/socket.io.js")
+	script.
+		var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port + '/');
+		socket.on('donation', function(donation){
+			var projectColumn;
+			var projectColumns = document.getElementById('projectList');
+			projectColumn = projectColumns.children.item(donation.projectNumber);
+			//Updating project total
+			var projectTotal = projectColumn.children.item(1).textContent;
+			projectTotal = Number(projectTotal);
+			projectTotal += Number(donation.total);
+			projectColumn.children.item(1).textContent = projectTotal;
+			//Updating shares total
+			var numShares = projectColumn.children.item(4).textContent;
+			numShares = Number(numShares);
+			numShares += Number(donation.shares);
+			projectColumn.children.item(4).textContent = numShares;
+		});
