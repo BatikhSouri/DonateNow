@@ -5,7 +5,7 @@ A little webapp made for doing real-life crowd-funding at events.
 
 ## Why ?
 
-I have been on different events where the organizers "crowd-funded" their projects. I mean, literally crowd-funding; not like the crowd-funding we are seeing now on the internet. On some occasions, there is a person in charge of presenting of the projects to fund, and then s/he might start off the donations by asking who's read to give "amount x", waiting for someone to say I will. Then all donations are "announced" out loud.
+I have been on different events where the organizers "crowd-funded" their projects. I mean, literally crowd-funding; not like the crowd-funding we are seeing now on the internet. On some occasions, there is a person in charge of presenting of the projects to fund, and then s/he might start off the donations by asking who's ready to give "amount x", waiting for someone to say "I will". Then all donations are "announced" out loud.
 
 I guess there are a few problems with this :
 
