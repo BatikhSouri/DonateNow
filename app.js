@@ -24,7 +24,7 @@ app.use(express.urlencoded());
 app.use(express.multipart());
 app.use(express.methodOverride());
 app.use(express.cookieParser());
-app.use(express.cookieSession({secret: config.cookieSecret, cookie: {path: '/donations'}}));
+app.use(express.cookieSession({secret: config.cookieSecret, cookie: {path: '/', maxAge: null}}));
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -41,6 +41,8 @@ routes.ondonation = function(projectNumber, shares, total){
 app.get('/', routes.index);
 app.get('/donation', routes.donationPage);
 app.post('/donation', routes.saveDonation);
+app.get('/search', routes.searchPage);
+app.post('/search', routes.searchAjax);
 
 var server = http.createServer(app);
 io = io.listen(server);

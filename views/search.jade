@@ -1,0 +1,92 @@
+extends layout
+
+block content
+	#alert.alert.alert-dismissable(style="display: none")
+		button.close(type="button", data-dismiss="alert", aria-hideen="true") &times;
+		span#alertContent
+	//h1 Search
+	.donor-search-block
+		input#searchInput.form-control.donor-search(type="number", placeholder="Numéro de donateur")
+		button#searchButton.btn.btn-primary Chercher
+	table#renderResultsTable.table.table-condensated(style="display: none")
+		thead
+			tr
+				th Projet
+				th Nombre d'actions
+				th Total
+		tfoot
+			tr
+				th
+				th
+				th#totalDonationCell 
+		tbody#resultsTableBody
+
+	script.
+		searchButton.onclick = function(e){
+			e.preventDefault();
+			//Parsing the donor number
+			var donorNumber = searchInput.value;
+			donorNumber = Number(donorNumber);
+			console.log('donorNumber: ' + donorNumber);
+			if (Number.isNaN(donorNumber) || donorNumber == 0 || Math.round(donorNumber) != donorNumber){
+				showAlert('alert-danger', 'Le numero de donneur entré est invalide.', 2500);
+				return;
+			}
+			//Buidling the ajax search request
+			var searchReqData = new FormData();
+			searchReqData.append('donorNumber', donorNumber);
+			var req = new XMLHttpRequest();
+			req.open('POST', '/search');
+			req.onload = function(){
+				if (this.status === 200){
+					console.log(this.response);
+					renderResultsTable(JSON.parse(this.response));
+				} else {
+					showAlert('alert-danger', this.response, 3000);
+				}
+			};
+			req.send(searchReqData);
+			//Redenring results
+		};
+		function renderResultsTable(results){
+			var donationsTotal = 0;
+			//Clearing table elements
+			while (resultsTableBody.firstChild){
+				resultsTableBody.removeChild(resultsTableBody.firstChild);
+			}
+			//Adding now results rows
+			for (var i = 0; i < results.length; i++){
+				//Adding up to the total
+				donationsTotal += results[i].total;
+				//Building table row
+				var newResultRow = document.createElement('tr');
+				var projectNameCell = document.createElement('th');
+				projectNameCell.textContent = results[i].projectName;
+				var donatedSharesCell = document.createElement('th');
+				donatedSharesCell.textContent = results[i].shares;
+				var donationSizeCell = document.createElement('th');
+				donationSizeCell.textContent = results[i].total;
+				newResultRow.appendChild(projectNameCell);
+				newResultRow.appendChild(donatedSharesCell);
+				newResultRow.appendChild(donationSizeCell);
+				resultsTableBody.appendChild(newResultRow);
+			}
+			//Write the donationsTotal in the table
+			totalDonationCell.textContent = donationsTotal;
+			//Show the table
+			$('#renderResultsTable').show();
+		}
+		var alertElement = document.getElementById('alert');
+		var alertContent = document.getElementById('alertContent');
+		function showAlert(alertClass, message, dismissTime){
+			if (!(alertClass == 'alert-success' || alertClass == 'alert-info' || alertClass == 'alert-warning' || alertClass == 'alert-danger')) return;
+			$('#alert').removeClass('alert-success alert-info alert-warning alert-danger');
+			$('#alert').addClass(alertClass);
+			alertContent.innerHTML = message;
+			$('#alert').show();
+			if (dismissTime && typeof dismissTime == 'number' && dismissTime > 0){
+				setTimeout(function(){
+					$('#alert').fadeOut(600);
+				}, dismissTime);
+			}
+		}

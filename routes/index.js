@@ -89,3 +89,50 @@ exports.saveDonation = function(req, res){
 		}
 	});
 };
+
+exports.searchPage = function(req, res){
+	res.render('search', {title: 'Search'});	
+};
+
+exports.searchAjax = function(req, res){
+	var donorNumber = req.body.donorNumber;
+	Donation.find({donorNumber: donorNumber}, function(err, results){
+		if (err){
+			console.log('Error while searching donations from number ' + donorNumber + '\n' + JSON.stringify(err));
+			res.status(500).send('Erreur lors de la recherche');
+		} else {
+			var perProjectSums = [];
+			for (var i = 0; i < results.length; i++){
+				perProjectSums = insertDonation(results[i], perProjectSums);
+			}
+			//Adding projects details to resulting donation objects
+			Project.find(function(err, projects){
+				if (err){
+					res.status(500).send('Erreur lors de la recherche');
+				} else {
+					//Navigate donation objects first, because #donationObjects <= #projects
+					for (var i = 0; i < perProjectSums.length; i++){
+						for (var j = 0; i < projects.length; j++){
+							if (perProjectSums[i].projectNumber == projects[j].projectNumber){
+								perProjectSums[i].projectName = projects[j].name;
+								break;
+							}
+						}
+					}
+					res.json(perProjectSums);
+				}
+			});
+		}
+	});
+	function insertDonation(donation, donationSums){
+		for (var i = 0; i < donationSums.length; i++){
+			if (donationSums[i].projectNumber == donation.projectNumber){
+				donationSums[i].total += donation.total;
+				donationSums[i].shares += donation.shares;
+				return donationSums;
+			}
+		}
+		donationSums.push({donorNumber: donation.donorNumber, projectNumber: donation.projectNumber, shares: donation.shares, total: donation.total});
+		return donationSums;
+	}
+};
