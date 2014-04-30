@@ -31,6 +31,8 @@ exports.index = function(req, res){
 				projectsCopy[i] = {};
 				projectsCopy[i].projectNumber = projects[i].projectNumber;
 				projectsCopy[i].name = projects[i].name;
+				projectsCopy[i].name2 = projects[i].name2;
+				projectsCopy[i].imageUrl = projects[i].imageUrl;
 				projectsCopy[i].shareSize = projects[i].shareSize;
 				projectsCopy[i].currency = projects[i].currency;
 				projectsCopy[i].total = 0;
@@ -59,10 +61,11 @@ exports.donationPage = function(req, res){
 };
 
 exports.saveDonation = function(req, res){
-	var projectNumber = Number(req.body.projectNumber);
+	var projectName = req.body.projectName;
+	console.log('Project name: ' + projectName);
 	var donorNumber = Number(req.body.donorNumber);
 	var numShares = Number(req.body.numShares);
-	Project.findOne({projectNumber: projectNumber}, function(err, project){
+	Project.findOne({name: projectName}, function(err, project){
 		if (err){
 			console.log('Error while saving the donation:\n' + JSON.stringify(err));
 			res.status(500).send('Erreur : la donation n\'a pas pu être sauvegardée');
@@ -71,7 +74,7 @@ exports.saveDonation = function(req, res){
 			var total = numShares * project.shareSize;
 			var newDonation = new Donation({
 				donorNumber: donorNumber,
-				projectNumber: projectNumber,
+				projectNumber: project.projectNumber,
 				shares: numShares,
 				total: total
 			});
@@ -81,11 +84,11 @@ exports.saveDonation = function(req, res){
 					res.status(500).send('Erreur : la donation n\'a pas pu être sauvegardée');
 				} else {
 					res.send('Donation saved');
-					exports.ondonation(projectNumber, numShares, total);
+					exports.ondonation(project.projectNumber, numShares, total);
 				}
 			});
 		} else {
-			res.status(400).send('Le project numero ' + projectNumber + ' n\'existe pas');
+			res.status(400).send('Le project numero ' + projectName + ' n\'existe pas');
 		}
 	});
 };

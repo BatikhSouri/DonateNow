@@ -11,7 +11,7 @@ block content
 			label(for='project') Projet
 			select#selectedProject.form-control
 				- for project in projects
-					option #{project.name} (#{project.shareSize} #{project.currency}/action)
+					option #{project.name} (#{project.shareSize} #{project.currency}/part)
 		.form-group
 			label(for='donorNumber') Numéro de donateur
 			input#donorNumber.form-control(type='number')
@@ -23,7 +23,9 @@ block content
 		var saveButton = document.getElementById('saveDonation');
 		saveButton.onclick = function(e){
 			e.preventDefault();
-			var projectNumber = selectedProject.selectedIndex;
+			var projectName = selectedProject.item(selectedProject.selectedIndex).text;
+			projectName = projectName.split(' (')[0];
+			console.log('Project name: ' + projectName);
 			var donorNumber = document.getElementById('donorNumber').value;
 			donorNumber = Number(donorNumber)
 			if (Number.isNaN(donorNumber) || donorNumber == 0 || Math.round(donorNumber) != donorNumber){
@@ -39,7 +41,7 @@ block content
 			//Building the ajax request
 			var req = new XMLHttpRequest();
 			var data = new FormData();
-			data.append('projectNumber', projectNumber);
+			data.append('projectName', projectName);
 			data.append('donorNumber', donorNumber);
 			data.append('numShares', numShares);
 			req.open('POST', '/donation');

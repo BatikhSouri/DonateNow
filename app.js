@@ -48,6 +48,17 @@ var server = http.createServer(app);
 io = io.listen(server);
 io.set('log level', 1);
 
-server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+exports.start = function(){
+	server.listen(app.get('port'), function(){
+	  console.log('Express server listening on port ' + app.get('port'));
+	});
+};
+
+exports.stop = function(){
+
+};
+
+if (!module.parent){
+	exports.start();
+}
+

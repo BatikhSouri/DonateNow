@@ -3,28 +3,81 @@ extends layout
 block content
 	h1 Projets de #{beneficiaryName}
 	#projectList.row(style="margin-top: 40px")
-		- for project in projects
-			.col-md-3.projectcolumn
-				h3.center #{project.name}
-				div.counter.large #{project.total}
-				div.center(style="font-size: 24px") #{project.currency}
-				div.center(style="margin-top: 30px; font-size: 24px") Nombre d'actions :
-				div.counter #{project.numShares}
+		-if (projects.length == 1)
+			- for project in projects
+				.col-xs-12
+					.projectcolumn
+						h3.center.title #{project.name}
+						- if (project.name2)
+							h3.center.title #{project.name2}
+						h4.center (#{project.shareSize} #{project.currency}/part)
+						- if (project.imageUrl)
+							.fixedImgContainer
+								img.projectimg(src="#{project.imageUrl}")
+						div.counter.large.total #{project.total}
+						div.center(style="font-size: 24px") #{project.currency}
+						div.center(style="margin-top: 30px; font-size: 24px") Nombre d'actions :
+						div.counter.parts #{project.numShares}
+		-if (projects.length == 2)
+			- for project in projects
+				.col-xs-6
+					.projectcolumn
+						h3.center.title #{project.name}
+						- if (project.name2)
+							h3.center.title #{project.name2}
+						h4.center (#{project.shareSize} #{project.currency}/part)
+						- if (project.imageUrl)
+							.fixedImgContainer
+								img.projectimg(src="#{project.imageUrl}")
+						div.counter.large.total #{project.total}
+						div.center(style="font-size: 24px") #{project.currency}
+						div.center(style="margin-top: 30px; font-size: 24px") Nombre d'actions :
+						div.counter.parts #{project.numShares}
+		-if (projects.length == 3)
+			- for project in projects
+				.col-xs-4
+					.projectcolumn
+						h3.center.title #{project.name}
+						- if (project.name2)
+							h3.center.title #{project.name2}
+						h4.center (#{project.shareSize} #{project.currency}/part)
+						- if (project.imageUrl)
+							.fixedImgContainer
+								img.projectimg(src="#{project.imageUrl}")
+						div.counter.large.total #{project.total}
+						div.center(style="font-size: 24px") #{project.currency}
+						div.center(style="margin-top: 30px; font-size: 24px") Nombre d'actions :
+						div.counter.parts #{project.numShares}
+		-if (projects.length >= 4)	
+			- for project in projects
+				.col-xs-3
+					.projectcolumn
+						h3.center.title #{project.name}
+						- if (project.name2)
+							h3.center.title #{project.name2}
+						h4.center (#{project.shareSize} #{project.currency}/part)
+						- if (project.imageUrl)
+							.fixedImgContainer
+								img.projectimg(src="#{project.imageUrl}")
+						div.counter.large.total #{project.total}
+						div.center(style="font-size: 24px") #{project.currency}
+						div.center(style="margin-top: 30px; font-size: 24px") Nombre d'actions :
+						div.counter.parts #{project.numShares}
 	script(src="/socket.io/socket.io.js")
 	script.
 		var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port + '/');
 		socket.on('donation', function(donation){
 			var projectColumn;
 			var projectColumns = document.getElementById('projectList');
-			projectColumn = projectColumns.children.item(donation.projectNumber);
+			projectColumn = projectColumns.children.item(donation.projectNumber).children.item(0);
 			//Updating project total
-			var projectTotal = projectColumn.children.item(1).textContent;
+			var projectTotal = projectColumn.getElementsByClassName('total')[0].textContent;
 			projectTotal = Number(projectTotal);
 			projectTotal += Number(donation.total);
-			projectColumn.children.item(1).textContent = projectTotal;
+			projectColumn.getElementsByClassName('total')[0].textContent = projectTotal;
 			//Updating shares total
-			var numShares = projectColumn.children.item(4).textContent;
+			var numShares = projectColumn.getElementsByClassName('parts')[0].textContent;
 			numShares = Number(numShares);
 			numShares += Number(donation.shares);
-			projectColumn.children.item(4).textContent = numShares;
+			projectColumn.getElementsByClassName('parts')[0].textContent = numShares;
 		});

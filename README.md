@@ -31,7 +31,7 @@ Limiting false/fake user input...
 ## Requirements
 
 * [Node.js](http://nodejs.org/)
-* [Mongo.DB](http://www.mongodb.org/)
+* [MongoDB](http://www.mongodb.org/)
 * A computer that you would use as "server" at the event (with those two programs installed...)
 * Some staff members equipped with a smartphone or a tablet
 * A common wifi network on which these machines could communicate (obviously?)

@@ -5,6 +5,8 @@ var Schema = mongoose.Schema;
 var Project = new Schema({
 	projectNumber: Number,
 	name: String,
+	name2: String,
+	imageUrl: String,
 	shareSize: Number,
 	currency: String
 });
