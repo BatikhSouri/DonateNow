@@ -27,14 +27,15 @@ block content
 			projectName = projectName.split(' (')[0];
 			console.log('Project name: ' + projectName);
 			var donorNumber = document.getElementById('donorNumber').value;
-			donorNumber = Number(donorNumber)
-			if (Number.isNaN(donorNumber) || donorNumber == 0 || Math.round(donorNumber) != donorNumber){
+			donorNumber = Number(donorNumber);
+			console.log(donorNumber);
+			if (donorNumber == 0 || Math.round(donorNumber) != donorNumber){
 				showAlert('alert-danger', '<strong>Erreur : </strong>Le numéro de donneur doit être un nombre', 1500);
 				return;
 			}
 			var numShares = document.getElementById('numShares').value;
 			numShares = Number(numShares);
-			if (Number.isNaN(numShares) || numShares <= 0){
+			if (numShares <= 0){
 				showAlert('alert-danger', '<strong>Erreur : </strong>Le nombre d\'action entré est invalide', 1500);
 				return;
 			}
