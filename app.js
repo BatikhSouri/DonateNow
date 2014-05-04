@@ -39,10 +39,13 @@ routes.ondonation = function(projectNumber, shares, total){
 };
 
 app.get('/', routes.index);
+app.get('/login', routes.loginPage);
+app.post('/login', routes.loginCheck);
 app.get('/donation', routes.donationPage);
 app.post('/donation', routes.saveDonation);
 app.get('/search', routes.searchPage);
 app.post('/search', routes.searchAjax);
+app.post('/search/status', routes.updateStatus);
 
 var server = http.createServer(app);
 io = io.listen(server);

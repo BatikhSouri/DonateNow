@@ -1,3 +1,4 @@
+var crypto = require('crypto');
 var mongoose = require('mongoose');
 var Project = mongoose.model('Project');
 var Donation = mongoose.model('Donation');
@@ -46,6 +47,50 @@ exports.index = function(req, res){
 			res.render('index', { title: 'DonateNow', projects: projectsCopy, beneficiaryName: config.beneficiaryName });
 		});
 	});
+};
+
+exports.loginPage = function(req, res){
+	res.render('login', {title: 'Login - DonateNow'});
+};
+
+exports.loginCheck = function(req, res){
+	var username = req.body.username;
+	var password = req.body.password;
+	Writer.findOne({username: username}. function(err, user){
+		if (err){
+			res.status(500).send('Erreur interne lors de la connexion');
+			return;
+		}
+		if (!user){
+			res.render('login', {title: 'Login - DonateNow', invalidCredentials: true});
+			return;
+		}
+		var sha1Pass = crypto.createHash('sha1');
+		sha1Pass.update(password + user.salt, 'utf8');
+		var hash = sha1Pass.digest('hex');
+		if (hash == user.hashedPassword){
+			//Generating sessionId
+			crypto.pseudoRandomBytes(8, function(sessionIdBytes){
+				var sessionId = sessionIdBytes.toString('hex');
+				var newSession = new Session({
+					writerId: user.writerId,
+					sessionId: sessionId;
+				});
+				newSession.save(function(err){
+					if (err){
+						res.status(500).send('Erreur interne lors de la connexion');
+						return;
+					}
+					req.session.writerId = user.writerId;
+					req.session.sessionId = sessionId;
+					res.redirect('/');
+				});
+			});
+		} else {
+			res.render('login', {title: 'Login - DonateNow', invalidCredentials: true});
+		}
+	});
+	res.redirect('/');
 };
 
 exports.donationPage = function(req, res){
@@ -138,4 +183,16 @@ exports.searchAjax = function(req, res){
 		donationSums.push({donorNumber: donation.donorNumber, projectNumber: donation.projectNumber, shares: donation.shares, total: donation.total});
 		return donationSums;
 	}
+};
+
+exports.updateStatus = function(req, res){
+	var donorNumber = req.body.donorNumber;
+	Donation.find({donorNumber: donorNumber}, function(err, results){
+		if (err){
+			console.log('Error while searching donations (to update their status) from number ' + donorNumber + '\n' + JSON.stringify(err));
+			res.status(500).send('Erreur lors de la mise à jour');
+			return;
+		}
+
+	});
 };

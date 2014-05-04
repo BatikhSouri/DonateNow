@@ -5,6 +5,9 @@ body {
 a {
   color: #00b7ff;
 }
+/*
+* Counter page
+*/
 .projectcolumn {
   border-width: 1px;
   border-style: solid;
@@ -61,4 +64,31 @@ a {
   height: auto;
   max-height: 100%;
   max-width: 100%;
+}
+/*
+* Login page
+*/
+.loginContainer {
+  margin-top: 150px;
+  text-align: center;
+}
+.loginForm {
+  display: inline-block;
+  height: 150px;
+  width: 250px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #808080;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 3px;
+}
+.loginForm > form > input {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.loginForm > form > button {
+  margin-top: 6px;
+  margin-bottom: 6px;
 }

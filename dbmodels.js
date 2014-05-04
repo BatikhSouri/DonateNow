@@ -12,22 +12,26 @@ var Project = new Schema({
 });
 
 var Donation = new Schema({
-	writerId: Number,
+	writerId: String,
 	donorNumber: Number,
 	projectNumber: Number,
 	shares: Number,
-	total: Number
+	total: Number,
+	collected: {type: Boolean, default: false},
+	collector: String
 });
 
 var Writer = new Schema({
-	writerId: Number,
+	writerId: String,
 	username: String,
-	password: String
+	hashedPassword: String,
+	salt: String,
+	admin: {type: Boolean, default: false}
 });
 
 var Session = new Schema({
 	sessionId: String,
-	writerId: Number
+	writerId: String
 });
 
 var connectionString = 'mongodb://';
