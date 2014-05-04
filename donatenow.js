@@ -27,7 +27,7 @@ function generateText(length){
 }
 
 function checkUsername(username){
-	var usernameRegex = /^\w$/;
+	var usernameRegex = /^\w+$/;
 	return usernameRegex.test(username);
 }
 
@@ -71,9 +71,13 @@ function startStopApp(callback){
 		callback();
 	} else {
 		appProcess = spawn('node', ['app.js']);
+		appProcess.stderr.setEncoding('utf8');
+		appProcess.stderr.on('data', function(data){
+			console.error(data);
+		})
 		appProcess.stdout.setEncoding('utf8');
 		appProcess.stdout.on('data', function(data){
-			if (data.indexOf('Express server listening on port') < 0){
+			if (data.indexOf('Express server listening on port') > -1){
 				callback();
 			}
 		});
@@ -82,7 +86,7 @@ function startStopApp(callback){
 
 function manageUsers(callback){
 	console.log('What do you want to do?');
-	console.log('1. list users');
+	console.log('1. List users');
 	console.log('2. Add a user');
 	console.log('3. Remove a user');
 	console.log('4. Go back');
@@ -117,7 +121,7 @@ function manageUsers(callback){
 }
 
 function addUser(callback){
-	rl.question('Enter the username', function(username){
+	rl.question('Enter the username: ', function(username){
 		if (!username || username.length == 0){
 			console.log('username can\'t be null');
 			addUser(callback);
@@ -150,7 +154,7 @@ function addUser(callback){
 }
 
 function removeUser(callback){
-	
+
 }
 
 function listUsers(callback){

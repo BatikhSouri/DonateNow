@@ -6,6 +6,6 @@ block content
 			.alert.alert-danger Identifiants invalides. Veuillez réessayer.
 		.loginForm
 			form(role="form", action="/login", method="post")
-				input#username.form-control(placeholder="Nom d'utilisateur")
-				input#password.form-control(type="password", placeholder="Mot de passe")
+				input#username.form-control(name="username", placeholder="Nom d'utilisateur")
+				input#password.form-control(name="password", type="password", placeholder="Mot de passe")
 				button.btn.btn-primary(type="submit") Connexion

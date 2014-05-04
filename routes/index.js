@@ -56,7 +56,7 @@ exports.loginPage = function(req, res){
 exports.loginCheck = function(req, res){
 	var username = req.body.username;
 	var password = req.body.password;
-	Writer.findOne({username: username}. function(err, user){
+	Writer.findOne({username: username}, function(err, user){
 		if (err){
 			res.status(500).send('Erreur interne lors de la connexion');
 			return;
@@ -68,13 +68,15 @@ exports.loginCheck = function(req, res){
 		var sha1Pass = crypto.createHash('sha1');
 		sha1Pass.update(password + user.salt, 'utf8');
 		var hash = sha1Pass.digest('hex');
+		console.log('hash: ' + hash);
+		console.log('hashedPassword: ' + user.hashedPassword);
 		if (hash == user.hashedPassword){
 			//Generating sessionId
-			crypto.pseudoRandomBytes(8, function(sessionIdBytes){
+			crypto.pseudoRandomBytes(8, function(err, sessionIdBytes){
 				var sessionId = sessionIdBytes.toString('hex');
 				var newSession = new Session({
 					writerId: user.writerId,
-					sessionId: sessionId;
+					sessionId: sessionId
 				});
 				newSession.save(function(err){
 					if (err){
@@ -90,8 +92,20 @@ exports.loginCheck = function(req, res){
 			res.render('login', {title: 'Login - DonateNow', invalidCredentials: true});
 		}
 	});
-	res.redirect('/');
 };
+
+exports.logout = function(req, res){
+	if (req.session){
+		Session.remove({writerId: req.session.writerId, sessionId: req.session.sessionId}, function(err){
+			if (err){
+				res.status(500).send('Internal error');
+				return;
+			}
+			req.session = null;
+			res.redirect('/login');
+		});
+	} else res.redirect('/login');
+}
 
 exports.donationPage = function(req, res){
 	//Check for cookies later on
