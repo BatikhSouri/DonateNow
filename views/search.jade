@@ -82,7 +82,7 @@ block content
 			totalDonationCell.textContent = donationsTotal;
 			//Show the table
 			$('#renderResultsTable').show();
-			$('#collected').val(response.collected);
+			collected.checked = response.collected;
 			var writersList = 'Donation enregistrée par ';
 			if (response.writers.length == 1){
 				writersList += response.writers[0] + '.';
@@ -101,6 +101,17 @@ block content
 		collected.onclick = function(){
 			//Send update status req
 			console.log('Yell');
+			var req = new XMLHttpRequest();
+			req.open('post', '/search/status');
+			var fData = new FormData();
+			console.log('collected.value: ' + collected.checked);
+			fData.append('donorNumber', donorNumber);
+			fData.append('collected', Boolean(collected.checked));
+			req.onload = function(){
+				showAlert('alert-success', 'Statut mis à jour', 3500);
+				console.log('Status updated to ' + Boolean(collected.checked));
+			};
+			req.send(fData);
 		};
 		var alertElement = document.getElementById('alert');
 		var alertContent = document.getElementById('alertContent');

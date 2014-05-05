@@ -225,8 +225,8 @@ exports.searchAjax = function(req, res){
 };
 
 exports.updateStatus = function(req, res){
-	var donorNumber = req.body.donorNumber;
-	var collected = Boolean(req.body.collected);
+	var donorNumber = Number(req.body.donorNumber);
+	var collected = req.body.collected == 'true' ? true : false;
 	Donation.find({donorNumber: donorNumber}, function(err, results){
 		if (err){
 			console.log('Error while searching donations (to update their status) from number ' + donorNumber + '\n' + JSON.stringify(err));
@@ -238,5 +238,6 @@ exports.updateStatus = function(req, res){
 			results[i].collector = req.session.writerId;
 			results[i].save();
 		}
+		res.send('updated');
 	});
 };
