@@ -21,7 +21,7 @@ block content
 				th#totalDonationCell 
 		tbody#resultsTableBody
 
-	div
+	div#checkboxContainer(style="display: none")
 		input#collected(type="checkbox", name="status")
 		span.checkboxLabel Argent collecté
 	div#writers
@@ -33,7 +33,6 @@ block content
 			//Parsing the donor number
 			donorNumber = searchInput.value;
 			donorNumber = Number(donorNumber);
-			console.log('donorNumber: ' + donorNumber);
 			if (Number.isNaN(donorNumber) || donorNumber == 0 || Math.round(donorNumber) != donorNumber){
 				showAlert('alert-danger', 'Le numero de donneur entré est invalide.', 2500);
 				return;
@@ -45,7 +44,6 @@ block content
 			req.open('POST', '/search');
 			req.onload = function(){
 				if (this.status === 200){
-					console.log(this.response);
 					renderResultsTable(JSON.parse(this.response));
 				} else {
 					showAlert('alert-danger', this.response, 3000);
@@ -60,7 +58,13 @@ block content
 			while (resultsTableBody.firstChild){
 				resultsTableBody.removeChild(resultsTableBody.firstChild);
 			}
-			//Adding now results rows
+			$('#renderResultsTable').hide();
+			$('#writers').hide();
+			$('#checkboxContainer').hide();
+			if (response.donations.length == 0){
+				return;
+			}
+			//Adding now results rows, if they exist
 			var results = response.donations;
 			for (var i = 0; i < results.length; i++){
 				//Adding up to the total
@@ -96,20 +100,18 @@ block content
 					}
 				}
 			}
-			$('#writers').text(writersList);
+			$('#writers').text(writersList).show();
+			$('#checkboxContainer').show();
 		}
 		collected.onclick = function(){
 			//Send update status req
-			console.log('Yell');
 			var req = new XMLHttpRequest();
 			req.open('post', '/search/status');
 			var fData = new FormData();
-			console.log('collected.value: ' + collected.checked);
 			fData.append('donorNumber', donorNumber);
 			fData.append('collected', Boolean(collected.checked));
 			req.onload = function(){
 				showAlert('alert-success', 'Statut mis à jour', 3500);
-				console.log('Status updated to ' + Boolean(collected.checked));
 			};
 			req.send(fData);
 		};

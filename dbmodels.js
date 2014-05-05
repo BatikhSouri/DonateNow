@@ -8,7 +8,8 @@ var Project = new Schema({
 	name2: String,
 	imageUrl: String,
 	shareSize: Number,
-	currency: String
+	currency: String,
+	traget: Number
 });
 
 var Donation = new Schema({
