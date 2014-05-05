@@ -20,8 +20,11 @@ block content
 				th
 				th#totalDonationCell 
 		tbody#resultsTableBody
-	label#writers
-	input#colleced(type="checkbox") Argent collecté
+
+	div
+		input#collected(type="checkbox", name="status")
+		span.checkboxLabel Argent collecté
+	div#writers
 
 	script.
 		var donorNumber;
@@ -58,7 +61,7 @@ block content
 				resultsTableBody.removeChild(resultsTableBody.firstChild);
 			}
 			//Adding now results rows
-			var results = response.results;
+			var results = response.donations;
 			for (var i = 0; i < results.length; i++){
 				//Adding up to the total
 				donationsTotal += results[i].total;
@@ -79,10 +82,10 @@ block content
 			totalDonationCell.textContent = donationsTotal;
 			//Show the table
 			$('#renderResultsTable').show();
-			$('#collected').value(response.collected);
+			$('#collected').val(response.collected);
 			var writersList = 'Donation enregistrée par ';
 			if (response.writers.length == 1){
-				writersList += writers[0] + '.';
+				writersList += response.writers[0] + '.';
 			} else {
 				for (var i = 0; i < response.writers.length; i++){
 					if (i == response.writers.length - 1){
@@ -97,6 +100,7 @@ block content
 		}
 		collected.onclick = function(){
 			//Send update status req
+			console.log('Yell');
 		};
 		var alertElement = document.getElementById('alert');
 		var alertContent = document.getElementById('alertContent');

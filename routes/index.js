@@ -192,7 +192,7 @@ exports.searchAjax = function(req, res){
 						}
 					}
 					//Translate writerIDs into usernames...
-					Writers.find(function(err, registeredWriters){
+					Writer.find(function(err, registeredWriters){
 						if (err){
 							res.status(500).send('Erreur lors de la recherche');
 							return;
