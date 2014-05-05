@@ -68,8 +68,6 @@ exports.loginCheck = function(req, res){
 		var sha1Pass = crypto.createHash('sha1');
 		sha1Pass.update(password + user.salt, 'utf8');
 		var hash = sha1Pass.digest('hex');
-		console.log('hash: ' + hash);
-		console.log('hashedPassword: ' + user.hashedPassword);
 		if (hash == user.hashedPassword){
 			//Generating sessionId
 			crypto.pseudoRandomBytes(8, function(err, sessionIdBytes){
@@ -135,7 +133,8 @@ exports.saveDonation = function(req, res){
 				donorNumber: donorNumber,
 				projectNumber: project.projectNumber,
 				shares: numShares,
-				total: total
+				total: total,
+				writerId: req.session.writerId
 			});
 			newDonation.save(function(err){
 				if (err){
@@ -164,8 +163,19 @@ exports.searchAjax = function(req, res){
 			res.status(500).send('Erreur lors de la recherche');
 		} else {
 			var perProjectSums = [];
+			var writers = [];
+			var collected = true;
 			for (var i = 0; i < results.length; i++){
 				perProjectSums = insertDonation(results[i], perProjectSums);
+				if (collected) collected = results[i].collected; //Will end up being false if one of the donations is not collected. Bim.
+				var writerInserted = false;
+				for (var j = 0; j < writers.length; j++){
+					if (writers[j] == results[i].writerId){
+						writerInserted = true;
+						break;
+					}
+				}
+				if (!writerInserted) writers.push(results[i].writerId);
 			}
 			//Adding projects details to resulting donation objects
 			Project.find(function(err, projects){
@@ -181,7 +191,22 @@ exports.searchAjax = function(req, res){
 							}
 						}
 					}
-					res.json(perProjectSums);
+					//Translate writerIDs into usernames...
+					Writers.find(function(err, registeredWriters){
+						if (err){
+							res.status(500).send('Erreur lors de la recherche');
+							return;
+						}
+						for (var i = 0; i < writers.length; i++){
+							for (var j = 0; j < registeredWriters.length; j++){
+								if (writers[i] == registeredWriters[j].writerId){
+									writers[i] = registeredWriters[i].username;
+									break;
+								}
+							}
+						}
+						res.json({donations: perProjectSums, writers: writers, collected: collected});
+					});
 				}
 			});
 		}
@@ -201,12 +226,17 @@ exports.searchAjax = function(req, res){
 
 exports.updateStatus = function(req, res){
 	var donorNumber = req.body.donorNumber;
+	var collected = Boolean(req.body.collected);
 	Donation.find({donorNumber: donorNumber}, function(err, results){
 		if (err){
 			console.log('Error while searching donations (to update their status) from number ' + donorNumber + '\n' + JSON.stringify(err));
 			res.status(500).send('Erreur lors de la mise à jour');
 			return;
 		}
-
+		for (var i = 0; i < results.length; i++){
+			results[i].collected = collected;
+			results[i].collector = req.session.writerId;
+			results[i].save();
+		}
 	});
 };

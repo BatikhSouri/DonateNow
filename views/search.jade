@@ -20,12 +20,15 @@ block content
 				th
 				th#totalDonationCell 
 		tbody#resultsTableBody
+	label#writers
+	input#colleced(type="checkbox") Argent collecté
 
 	script.
+		var donorNumber;
 		searchButton.onclick = function(e){
 			e.preventDefault();
 			//Parsing the donor number
-			var donorNumber = searchInput.value;
+			donorNumber = searchInput.value;
 			donorNumber = Number(donorNumber);
 			console.log('donorNumber: ' + donorNumber);
 			if (Number.isNaN(donorNumber) || donorNumber == 0 || Math.round(donorNumber) != donorNumber){
@@ -48,13 +51,14 @@ block content
 			req.send(searchReqData);
 			//Redenring results
 		};
-		function renderResultsTable(results){
+		function renderResultsTable(response){
 			var donationsTotal = 0;
 			//Clearing table elements
 			while (resultsTableBody.firstChild){
 				resultsTableBody.removeChild(resultsTableBody.firstChild);
 			}
 			//Adding now results rows
+			var results = response.results;
 			for (var i = 0; i < results.length; i++){
 				//Adding up to the total
 				donationsTotal += results[i].total;
@@ -75,7 +79,25 @@ block content
 			totalDonationCell.textContent = donationsTotal;
 			//Show the table
 			$('#renderResultsTable').show();
+			$('#collected').value(response.collected);
+			var writersList = 'Donation enregistrée par ';
+			if (response.writers.length == 1){
+				writersList += writers[0] + '.';
+			} else {
+				for (var i = 0; i < response.writers.length; i++){
+					if (i == response.writers.length - 1){
+						writersList += ' & ' + response.writers[i];
+					} else {
+						writersList += response.writer[i];
+						if (i != response.writers.length - 2) writersList += ', ';
+					}
+				}
+			}
+			$('#writers').text(writersList);
 		}
+		collected.onclick = function(){
+			//Send update status req
+		};
 		var alertElement = document.getElementById('alert');
 		var alertContent = document.getElementById('alertContent');
 		function showAlert(alertClass, message, dismissTime){
