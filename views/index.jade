@@ -15,9 +15,13 @@ block content
 							.fixedImgContainer
 								img.projectimg(src="#{project.imageUrl}")
 						div.counter.large.total #{project.total}
-						div.center(style="font-size: 24px") #{project.currency}
-						div.center(style="margin-top: 30px; font-size: 24px") Nombre de parts :
-						div.counter.parts #{project.numShares}
+						div.center.fs24 #{project.currency}
+						//div.center.fs24.margin-top20 Nombre de parts :
+						//div.counter.parts #{project.numShares}
+						div.center.fs16.margin-top20 Budget du projet
+						div.counter.small
+							- if (project.target)
+								| #{project.target} #{project.currency}
 		-if (projects.length == 2)
 			- for project in projects
 				.col-xs-6
@@ -30,9 +34,13 @@ block content
 							.fixedImgContainer
 								img.projectimg(src="#{project.imageUrl}")
 						div.counter.large.total #{project.total}
-						div.center(style="font-size: 24px") #{project.currency}
-						div.center(style="margin-top: 30px; font-size: 24px") Nombre de parts :
-						div.counter.parts #{project.numShares}
+						div.center.fs24 #{project.currency}
+						//div.center.fs24.margin-top20 Nombre de parts :
+						//div.counter.parts #{project.numShares}
+						div.center.fs16.margin-top20 Budget du projet
+						div.counter.small
+							- if (project.target)
+								| #{project.target} #{project.currency}
 		-if (projects.length == 3)
 			- for project in projects
 				.col-xs-4
@@ -45,10 +53,14 @@ block content
 							.fixedImgContainer
 								img.projectimg(src="#{project.imageUrl}")
 						div.counter.large.total #{project.total}
-						div.center(style="font-size: 24px") #{project.currency}
-						div.center(style="margin-top: 30px; font-size: 24px") Nombre de parts :
-						div.counter.parts #{project.numShares}
-		-if (projects.length >= 4)	
+						div.center.fs24 #{project.currency}
+						//div.center.fs24.margin-top20 Nombre de parts :
+						//div.counter.parts #{project.numShares}
+						div.center.fs16.margin-top20 Budget du projet
+						div.counter.small
+							- if (project.target)
+								| #{project.target} #{project.currency}
+		-if (projects.length >= 4)
 			- for project in projects
 				.col-xs-3
 					.projectcolumn
@@ -60,11 +72,20 @@ block content
 							.fixedImgContainer
 								img.projectimg(src="#{project.imageUrl}")
 						div.counter.large.total #{project.total}
-						div.center(style="font-size: 24px") #{project.currency}
-						div.center(style="margin-top: 30px; font-size: 24px") Nombre de parts :
-						div.counter.parts #{project.numShares}
+						div.center.fs24 #{project.currency}
+						//div.center.fs24.margin-top20 Nombre de parts :
+						//div.counter.parts #{project.numShares}
+						div.center.fs16.margin-top20 Budget du projet
+						div.counter.small
+							- if (project.target)
+								| #{project.target} #{project.currency}
+	.progress.target-progressbar
+		#globalProgressBar.progress-bar.progress-bar-success(role="progressbar", aria-valuenow="#{globalTotal}", aria-valuemin="0", aria-valuemax="#{globalTarget}", style="width: #{globalProgress}%")
 	script(src="/socket.io/socket.io.js")
 	script.
+		var globalTarget = #{globalTarget};
+		var globalTotal = #{globalTotal};
+		var partTotals = #{partTotals};
 		var socket = io.connect('http://' + window.location.hostname + ':' + window.location.port + '/');
 		socket.on('donation', function(donation){
 			var projectColumn;

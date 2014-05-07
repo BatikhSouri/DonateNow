@@ -28,6 +28,8 @@ exports.index = function(req, res){
 			}
 			//Copying projects to an other array, cuz it seems that mongoose don't allow to set fields that are not part of the data model
 			var projectsCopy = [];
+            var globalTotal = 0;
+            var partTotals = [];
 			for (var i = 0; i < projects.length; i++){
 				projectsCopy[i] = {};
 				projectsCopy[i].projectNumber = projects[i].projectNumber;
@@ -36,15 +38,22 @@ exports.index = function(req, res){
 				projectsCopy[i].imageUrl = projects[i].imageUrl;
 				projectsCopy[i].shareSize = projects[i].shareSize;
 				projectsCopy[i].currency = projects[i].currency;
+                projectsCopy[i].target = projects[i].target;
 				projectsCopy[i].total = 0;
 				projectsCopy[i].numShares = 0;
 			}
 			for (var i = 0; i < donations.length; i++){
 				projectsCopy[donations[i].projectNumber].total += donations[i].shares * projectsCopy[donations[i].projectNumber].shareSize;
 				projectsCopy[donations[i].projectNumber].numShares += donations[i].shares;
+                globalTotal += donations[i].shares * projectsCopy[donations[i].projectNumber].shareSize;
 			}
+            //Pushing partTotals
+            for (var i = 0; i < projects.length; i++){
+                partTotals.push(projects[i].total);
+            }
 			console.log('Projects state:\n' + JSON.stringify(projectsCopy));
-			res.render('index', { title: 'DonateNow', projects: projectsCopy, beneficiaryName: config.beneficiaryName });
+            console.log('partTotals: ' + JSON.stringify(partTotals));
+			res.render('index', { title: 'DonateNow', projects: projectsCopy, beneficiaryName: config.beneficiaryName, globalTarget: config.globalTarget, globalTotal: globalTotal, globalProgress: ((globalTotal / config.globalTarget) * 100).toFixed(2), partTotals: JSON.stringify(partTotals) });
 		});
 	});
 };
@@ -152,7 +161,7 @@ exports.saveDonation = function(req, res){
 };
 
 exports.searchPage = function(req, res){
-	res.render('search', {title: 'Search'});	
+	res.render('search', {title: 'Search'});
 };
 
 exports.searchAjax = function(req, res){
