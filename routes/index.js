@@ -48,8 +48,8 @@ exports.index = function(req, res){
                 globalTotal += donations[i].shares * projectsCopy[donations[i].projectNumber].shareSize;
 			}
             //Pushing partTotals
-            for (var i = 0; i < projects.length; i++){
-                partTotals.push(projects[i].total);
+            for (var i = 0; i < projectsCopy.length; i++){
+                partTotals.push(projectsCopy[i].total);
             }
 			console.log('Projects state:\n' + JSON.stringify(projectsCopy));
             console.log('partTotals: ' + JSON.stringify(partTotals));

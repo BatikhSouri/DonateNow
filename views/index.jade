@@ -99,9 +99,15 @@ block content
 			projectTotal = Number(projectTotal);
 			projectTotal += Number(donation.total);
 			projectColumn.getElementsByClassName('total')[0].textContent = projectTotal;
-			//Updating shares total
-			var numShares = projectColumn.getElementsByClassName('parts')[0].textContent;
-			numShares = Number(numShares);
-			numShares += Number(donation.shares);
-			projectColumn.getElementsByClassName('parts')[0].textContent = numShares;
+			//Updating progress bar
+			partTotals[donation.projectNumber] = projectTotal;
+			renderProgressBar();
 		});
+		function renderProgressBar(){
+			var donatedTotal = 0;
+			for (var i = 0; i < partTotals.length; i++){
+				donatedTotal += partTotals[i];
+			}
+			var progressBarWidth = ((donatedTotal / globalTarget) * 100).toFixed(2);
+			$('#globalProgressBar').css('width', progressBarWidth.toString() + '%');
+		}
