@@ -4,7 +4,8 @@ var Project = mongoose.model('Project');
 var Donation = mongoose.model('Donation');
 var Writer = mongoose.model('Writer');
 var Session = mongoose.model('Session');
-var config = require('../config');
+var configLoad = require('../configLoader');
+var config = configLoad('./config.json'); //process.cwd(), take that into account and you'll see that this path should be correct
 
 /*
  * GET home page.
@@ -13,6 +14,7 @@ var config = require('../config');
 exports.ondonation = function(){}; //On "new donation" event handler. To be catched by socket.io
 
 exports.index = function(req, res){
+    config = configLoad('./config.json');
 	Project.find().sort({projectNumber: 'asc'}).exec(function(err, projects){
 		if (err){
 			console.log('Error while getting projects :\n' + JSON.stringify(err));

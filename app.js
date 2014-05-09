@@ -6,9 +6,11 @@
 var express = require('express');
 var dbmodels = require('./dbmodels');
 var routes = require('./routes');
+var fs = require('fs');
 var http = require('http');
 var path = require('path');
-var config = require('./config');
+var configLoad = require('./configLoader');
+var config = configLoad('./config.json');
 var io = require('socket.io');
 
 var mongoose = require('mongoose');

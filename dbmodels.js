@@ -1,4 +1,5 @@
-var config = require('./config');
+var configLoad = require('./configLoader');
+var config = configLoad('./config.json');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
