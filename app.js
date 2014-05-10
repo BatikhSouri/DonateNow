@@ -77,7 +77,7 @@ io = io.listen(server);
 io.set('log level', 1);
 
 exports.start = function(){
-    server.listen(app.get('port'), function(){
+    server.listen(app.get('port'), config.bindingAddress, function(){
 	  console.log('Express server listening on port ' + app.get('port'));
 	});
 };
