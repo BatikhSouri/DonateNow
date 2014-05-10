@@ -59,7 +59,7 @@ exports.counter = function(req, res){
             }
 			console.log('Projects state:\n' + JSON.stringify(projectsCopy));
             console.log('partTotals: ' + JSON.stringify(partTotals));
-			res.render('index', { title: 'DonateNow', projects: projectsCopy, beneficiaryName: config.beneficiaryName, globalTarget: config.globalTarget, globalTotal: globalTotal, globalProgress: ((globalTotal / config.globalTarget) * 100).toFixed(2), partTotals: JSON.stringify(partTotals) });
+			res.render('index', { title: 'DonateNow', projects: projectsCopy, beneficiaryName: config.beneficiaryName, beneficiaryLogo: config.beneficiaryLogo, globalTarget: config.globalTarget, globalTotal: globalTotal, globalProgress: ((globalTotal / config.globalTarget) * 100).toFixed(2), partTotals: JSON.stringify(partTotals) });
 		});
 	});
 };

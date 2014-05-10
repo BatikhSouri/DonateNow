@@ -1,8 +1,13 @@
 extends layout
 
 block content
-	h1 Projets de #{beneficiaryName}
-	#projectList.row(style="margin-top: 40px")
+	.row
+		.col-xs-6
+			h1 Projets de #{beneficiaryName}
+		.col-xs-6(style="text-align: right")
+			.smallImgContainer
+				img.projectimg(src="#{beneficiaryLogo}")
+	#projectList.row(style="margin-top: 5px")
 		-if (projects.length == 1)
 			- for project in projects
 				.col-xs-12
