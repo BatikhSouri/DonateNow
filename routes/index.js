@@ -14,6 +14,10 @@ var config = configLoad('./config.json'); //process.cwd(), take that into accoun
 exports.ondonation = function(){}; //On "new donation" event handler. To be catched by socket.io
 
 exports.index = function(req, res){
+    res.render('menu', {title: 'DonateNow'});
+};
+
+exports.counter = function(req, res){
     config = configLoad('./config.json');
 	Project.find().sort({projectNumber: 'asc'}).exec(function(err, projects){
 		if (err){

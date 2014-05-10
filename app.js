@@ -29,7 +29,7 @@ app.use(express.urlencoded());
 app.use(express.multipart());
 app.use(express.methodOverride());
 app.use(express.cookieParser());
-app.use(express.cookieSession({secret: config.cookieSecret, cookie: {path: '/', maxAge: null}}));
+app.use(express.cookieSession({secret: config.cookieSecret, cookie: {path: '/', maxAge: 1000*60*60*24*365.25}}));
 app.use(function(req, res, next){
 	//Session checker
 	if (req.url.indexOf('/login') == 0 || req.url.indexOf('/stylesheets') == 0 || req.url.indexOf('/javascripts') == 0) {
@@ -62,6 +62,7 @@ routes.ondonation = function(projectNumber, shares, total){
 };
 
 app.get('/', routes.index);
+app.get('/counter', routes.counter);
 app.get('/login', routes.loginPage);
 app.post('/login', routes.loginCheck);
 app.get('/logout', routes.logout);

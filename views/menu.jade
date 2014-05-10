@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    .menuContainer
+        .menu
+            //a(href="/counter")
+            button#counterLink.btn.btn-large.btn-primary Compteur
+            //a(href="/donation")
+            button#donationLink.btn.btn-large.btn-primary Enregistrement de dons
+            //a(href="/search")
+            button#searchLink.btn.btn-large.btn-primary Recherche
+            //a(href="/logout")
+            button#logoutLink.btn.btn-large.btn-primary Déconnexion
+    script.
+        counterLink.onclick = function(){
+            window.location.pathname = '/counter';
+        };
+        donationLink.onclick = function(){
+            window.location.pathname = '/donation';
+        };
+        searchLink.onclick = function(){
+            window.location.pathname = '/search';
+        };
+        logoutLink.onclick = function(){
+            window.location.pathname = '/logout';
+        };
