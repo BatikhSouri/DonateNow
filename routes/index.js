@@ -134,7 +134,7 @@ exports.donationPage = function(req, res){
 
 exports.saveDonation = function(req, res){
 	var projectName = req.body.projectName;
-	console.log('Project name: ' + projectName);
+	//console.log('Project name: ' + projectName);
 	var donorNumber = Number(req.body.donorNumber);
 	var numShares = Number(req.body.numShares);
 	Project.findOne({name: projectName}, function(err, project){
@@ -215,7 +215,7 @@ exports.searchAjax = function(req, res){
 						for (var i = 0; i < writers.length; i++){
 							for (var j = 0; j < registeredWriters.length; j++){
 								if (writers[i] == registeredWriters[j].writerId){
-									writers[i] = registeredWriters[i].username;
+									writers[i] = registeredWriters[j].username;
 									break;
 								}
 							}
