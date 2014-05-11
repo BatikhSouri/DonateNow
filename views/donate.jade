@@ -18,8 +18,28 @@ block content
 		.form-group
 			label(for='numShares') Nombre d'actions
 			input#numShares.form-control(type='number')
+		label#subtotal(style="margin-top: 20px; margin-bottom: 20px; display: block; opacity: 0") Sous-total:
 		button#saveDonation.btn.btn-primary.btn-large Sauvegarder
 	script.
+		function calculateSubtotal(){
+			$('#numShares').css('color', 'black');
+			$('#subtotal').css('opacity', '0');
+			var projectName = selectedProject.item(selectedProject.selectedIndex).text;
+			projectName = projectName.split(/[(|)]/);
+			var shareSize = Number(projectName[1].split(' ')[0]);
+			var currency = projectName[1].split(' ')[1].split('/')[0];
+			var numShares = document.getElementById('numShares').value;
+			numShares = Number(numShares);
+			if (numShares <= 0 || Math.round(numShares) != numShares){
+				$('#numShares').css('color', 'red');
+				return;
+			}
+			var newSubTotal = shareSize * numShares;
+			subtotal.textContent = 'Sous-total (pour ce don): ' + newSubTotal + ' ' + currency;
+			$('#subtotal').css('opacity', '1');
+		}
+		selectedProject.onchange = calculateSubtotal;
+		numShares.onkeyup = calculateSubtotal;
 		var saveButton = document.getElementById('saveDonation');
 		saveButton.onclick = function(e){
 			e.preventDefault();
@@ -35,7 +55,7 @@ block content
 			}
 			var numShares = document.getElementById('numShares').value;
 			numShares = Number(numShares);
-			if (numShares <= 0){
+			if (numShares <= 0 || Math.round(numShares) != numShares){
 				showAlert('alert-danger', '<strong>Erreur : </strong>Le nombre d\'action entré est invalide', 1500);
 				return;
 			}
