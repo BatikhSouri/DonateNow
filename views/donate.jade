@@ -49,6 +49,7 @@ block content
 			req.onload = function(){
 				if (this.status === 200){
 					showAlert('alert-success', 'La donation a été enregistrée', 1500);
+					document.getElementById('numShares').value = null;
 				} else {
 					showAlert('alert-danger', 'Erreur lors de l\'enregistrement de la donation', 1500);
 				}
