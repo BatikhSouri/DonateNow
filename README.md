@@ -3,6 +3,8 @@
 
 A little webapp made for doing real-life crowd-funding at events.
 
+**NOTE: It's badly documented as of now, and it has many rough edges. You maybe shouldn't use it now. Or maybe you can remove the rough edges and complete the donatenow.js admin tool :)**
+
 ## Why ?
 
 I have been on different events where the organizers "crowd-funded" their projects. I mean, literally crowd-funding; not like the crowd-funding we are seeing now on the internet. On some occasions, there is a person in charge of presenting of the projects to fund, and then s/he might start off the donations by asking who's ready to give "amount x", waiting for someone to say "I will". Then all donations are "announced" out loud.
@@ -38,7 +40,7 @@ Limiting false/fake user input...
 
 ## How to run it ?
 
-Clone the repo, or download the [latest release](https://BatikhSouri/BatikhSouri/DonateNow/releases/). Then unzip it and navigate to it in the console/terminal then run `npm install`.
+Clone the repo, or download the [latest release](https://BatikhSouri/BatikhSouri/DonateNow/releases/). Then unzip it and navigate to it in the console/terminal then run `npm install`. Run `node donatenow.js` to set up user accounts and projects. Run then `node app.js` to start the web app.
 
 ## License
 
