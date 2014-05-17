@@ -5,6 +5,8 @@ A little webapp made for doing real-life crowd-funding at events.
 
 **NOTE: It's badly documented as of now, and it has many rough edges. You maybe shouldn't use it now. Or maybe you can remove the rough edges and complete the donatenow.js admin tool :)**
 
+**NOTE: The UI is in French. Sorry for that. If you want to help you can maybe find a practical way to make this app multi-linugal**
+
 ## Why ?
 
 I have been on different events where the organizers "crowd-funded" their projects. I mean, literally crowd-funding; not like the crowd-funding we are seeing now on the internet. On some occasions, there is a person in charge of presenting of the projects to fund, and then s/he might start off the donations by asking who's ready to give "amount x", waiting for someone to say "I will". Then all donations are "announced" out loud.
@@ -37,6 +39,11 @@ Limiting false/fake user input...
 * A computer that you would use as "server" at the event (with those two programs installed...)
 * Some staff members equipped with a smartphone or a tablet
 * A common wifi network on which these machines could communicate (obviously?)
+
+## Browser compatibility
+
+* Recent versions of Chrome and Firefox have worked pretty well with this app
+* Safari and IE seem to struggle with it.
 
 ## How to run it ?
 
