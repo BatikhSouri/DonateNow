@@ -58,16 +58,19 @@ function exportData(filename, callback){
                     var firstElem = blankDonorObject(donationsCopy[i].donorNumber);
                     firstElem['project' + donationsCopy[i].projectNumber] += donationsCopy[i].total;
                     firstElem.total += donationsCopy[i].total;
+                    firstElem.collected = donationsCopy[i].collected;
                     perDonor.push(firstElem);
                     continue;
                 }
                 if (last(perDonor).donorNumber == donationsCopy[i].donorNumber){
                     last(perDonor)['project' + donationsCopy[i].projectNumber] += donationsCopy[i].total;
                     last(perDonor).total += donationsCopy[i].total;
+                    if (last(perDonor).collected && !donationsCopy[i].collected) last(perDonor).collected = false;
                 } else {
                     var d = blankDonorObject(donationsCopy[i].donorNumber);
                     d['project' + donationsCopy[i].projectNumber] += donationsCopy[i].total;
                     d.total += donationsCopy[i].total;
+                    d.collected = donationsCopy[i].collected;
                     perDonor.push(d);
                 }
             }
@@ -93,7 +96,7 @@ function exportData(filename, callback){
                 return a[a.length - 1];
             }
             function blankDonorObject(donorNumber){
-                var d = {donorNumber: donorNumber, total: 0};
+                var d = {donorNumber: donorNumber, total: 0, collected: true};
                 for (var i = 0; i < projects.length; i++){
                     d['project' + projects[i].projectNumber] = 0;
                 }
