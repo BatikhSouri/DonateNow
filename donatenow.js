@@ -31,6 +31,16 @@ function checkUsername(username){
 	return usernameRegex.test(username);
 }
 
+function isUsernameAvailable(username, callback){
+	Writer.count({username: username}, function(err, count){
+		if (err){
+			callback(err);
+			return;
+		}
+		callback(undefined, count == 0);
+	});
+}
+
 function promptChoice(){
 	console.log('What do you want to do?');
 	console.log('1. Start/stop the app');
@@ -132,24 +142,36 @@ function addUser(callback){
 			addUser(callback);
 			return;
 		}
-		var pass = generateText(8);
-		var salt = generateText(4);
-		var passHash = crypto.createHash('sha1');
-		passHash.update(pass + salt, 'utf8');
-		var passField = passHash.digest('hex');
-		var newWriter = new Writer({
-			writerId: generateText(8),
-			username: username,
-			hashedPassword: passField,
-			salt: salt
-		});
-		newWriter.save(function(err){
+		isUsernameAvailable(username, function(err, isAvailable){
 			if (err){
-				throw err;
+				console.error('Error while checking username availability: ' + err);
+				callback();
+				return;
 			}
-			console.log('Password for user ' + username + ' : ' + pass);
-			callback();
-		});
+			if (!isAvailable){
+				console.log('Username ' + username + ' is already taken. Please choose an other one');
+				addUser(callback);
+				return;
+			}
+			var pass = generateText(8);
+			var salt = generateText(4);
+			var passHash = crypto.createHash('sha1');
+			passHash.update(pass + salt, 'utf8');
+			var passField = passHash.digest('hex');
+			var newWriter = new Writer({
+				writerId: generateText(8),
+				username: username,
+				hashedPassword: passField,
+				salt: salt
+			});
+			newWriter.save(function(err){
+				if (err){
+					throw err;
+				}
+				console.log('Password for user ' + username + ' : ' + pass);
+				callback();
+			});
+		})
 	});
 }
 
@@ -158,7 +180,19 @@ function removeUser(callback){
 }
 
 function listUsers(callback){
-
+	Writer.find(function(err, writers){
+		if (err){
+			console.error(err);
+			callback();
+			return;
+		}
+		console.log('Registered users: ' + writers.length)
+		var usernames = [];
+		for (var i = 0; i < writers.length; i++){
+			console.log(writers[i].username);
+		}
+		callback();
+	});
 }
 
 function manageProjects(callback){
