@@ -33,7 +33,7 @@ block content
 			//Parsing the donor number
 			donorNumber = searchInput.value;
 			donorNumber = Number(donorNumber);
-			if (Number.isNaN(donorNumber) || donorNumber == 0 || Math.round(donorNumber) != donorNumber){
+			if (isNaN(donorNumber) || donorNumber == 0 || Math.round(donorNumber) != donorNumber){
 				showAlert('alert-danger', 'Le numero de donneur entré est invalide.', 2500);
 				return;
 			}
