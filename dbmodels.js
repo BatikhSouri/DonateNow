@@ -44,7 +44,7 @@ connectionString += config.host + ':' + config.port + '/' + config.dbname;
 
 mongoose.connect(connectionString, function(err){
 	if (err) throw err;
-})
+});
 
 mongoose.model('Project', Project);
 mongoose.model('Donation', Donation);
