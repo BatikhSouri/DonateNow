@@ -323,7 +323,7 @@ function addProject(callback){
 	}
 
 	function nextProjectNumber(cb){
-		var maxProjectNumber = 0;
+		var maxProjectNumber = -1;
 		Project.find(function(err, currentProjects){
 			if (err){
 				cb(err);
