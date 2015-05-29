@@ -47,6 +47,7 @@ exports.counter = function(req, res){
                 projectsCopy[i].target = projects[i].target;
 				projectsCopy[i].total = 0;
 				projectsCopy[i].numShares = 0;
+                projectsCopy[i].notes = projects[i].notes;
 			}
 			for (var i = 0; i < donations.length; i++){
 				projectsCopy[donations[i].projectNumber].total += donations[i].shares * projectsCopy[donations[i].projectNumber].shareSize;
