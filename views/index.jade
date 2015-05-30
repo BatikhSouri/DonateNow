@@ -8,83 +8,9 @@ block content
 			.smallImgContainer
 				img.projectimg(src="#{beneficiaryLogo}")
 	#projectList.row(style="margin-top: 5px")
-		-if (projects.length == 1)
-			- for project in projects
-				.col-xs-12
-					.projectcolumn
-						h3.center.title #{project.name}
-						- if (project.name2)
-							h3.center.title #{project.name2}
-						h4.center (#{project.shareSize} #{project.currency}/part)
-						- if (project.imageUrl)
-							.fixedImgContainer
-								img.projectimg(src="#{project.imageUrl}")
-						div.counter.large.total #{project.total}
-						div.center.fs24 #{project.currency}
-						div.center.fs24.margin-top20 
-							!= project.notes
-						//div.counter.parts #{project.numShares}
-						div.center.fs16.margin-top20 Budget du projet
-						div.counter.small
-							- if (project.target)
-								| #{project.target} #{project.currency}
-		-if (projects.length == 2)
-			- for project in projects
-				.col-xs-6
-					.projectcolumn
-						h3.center.title #{project.name}
-						- if (project.name2)
-							h3.center.title #{project.name2}
-						h4.center (#{project.shareSize} #{project.currency}/part)
-						- if (project.imageUrl)
-							.fixedImgContainer
-								img.projectimg(src="#{project.imageUrl}")
-						div.counter.large.total #{project.total}
-						div.center.fs24 #{project.currency}
-						div.center.fs24.margin-top20 
-							!= project.notes
-						div.center.fs16.margin-top20 Budget du projet
-						div.counter.small
-							- if (project.target)
-								| #{project.target} #{project.currency}
-		-if (projects.length == 3)
-			- for project in projects
-				.col-xs-4
-					.projectcolumn
-						h3.center.title #{project.name}
-						- if (project.name2)
-							h3.center.title #{project.name2}
-						h4.center (#{project.shareSize} #{project.currency}/part)
-						- if (project.imageUrl)
-							.fixedImgContainer
-								img.projectimg(src="#{project.imageUrl}")
-						div.counter.large.total #{project.total}
-						div.center.fs24 #{project.currency}
-						div.center.fs24.margin-top20
-							!= project.notes
-						div.center.fs16.margin-top20 Budget du projet
-						div.counter.small
-							- if (project.target)
-								| #{project.target} #{project.currency}
-		-if (projects.length >= 4)
-			- for project in projects
-				.col-xs-3
-					.projectcolumn
-						h3.center.title #{project.name}
-						- if (project.name2)
-							h3.center.title #{project.name2}
-						h4.center (#{project.shareSize} #{project.currency}/part)
-						- if (project.imageUrl)
-							.fixedImgContainer
-								img.projectimg(src="#{project.imageUrl}")
-						div.counter.large.total #{project.total}
-						div.center.fs24 #{project.currency}
-						div.center.fs24.margin-top20
-							!= project.notes
-						div.center.fs16.margin-top20 Budget du projet
-						div.counter.small
-							- if (project.target)
-								| #{project.target} #{project.currency}
+		include project.jade
+		- for p in projects
+			+project(p, projects.length)
 	.progress.target-progressbar
 		#globalProgressBar.progress-bar.progress-bar-success(role="progressbar", aria-valuenow="#{globalTotal}", aria-valuemin="0", aria-valuemax="#{globalTarget}", style="width: #{globalProgress}%")
 	.row

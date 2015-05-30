@@ -1,0 +1,31 @@
+mixin project(p, projectsListLength)
+	- if (projectsListLength == 1)
+		.col-xs-12
+			+projectInfo(p)
+	- else if (projectsListLength == 2)
+		.col-xs-6
+			+projectInfo(p)
+	- else if (projectsListLength == 3)
+		.col-xs-4
+			+projectInfo(p)
+	- else
+		.col-xs-3
+			+projectInfo(p)
+
+mixin projectInfo(p)
+	.projectcolumn
+		h3.center.title #{p.name}
+		- if (p.name2)
+			h3.center.title #{p.name2}
+		h4.center (#{p.shareSize} #{p.currency}/part)
+		- if (p.imageUrl)
+			.fixedImgContainer
+				img.projectimg(src="#{p.imageUrl}")
+		div.counter.large.total #{p.total}
+		div.center.fs24 #{p.currency}
+		div.center.fs16.margin-top20
+			!= p.notes
+		div.center.fs16.margin-top20 Budget du projet
+		div.counter.small
+			- if (p.target)
+				| #{p.target} #{p.currency}
