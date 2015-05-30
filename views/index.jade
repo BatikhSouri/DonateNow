@@ -27,11 +27,9 @@ block content
 		var pcMaxHeight = 0;
 		for (var i = 0; i < pc.length; i++){
 			var currentHeight = $(pc.get(i)).height()
-			if (currentHeight > pcMaxHeight) pcMaxHeight = currentHeight);
+			if (currentHeight > pcMaxHeight) pcMaxHeight = currentHeight;
 		}
-		for (var i = 0; i < pc.length; i++){
-			$(pc.get(i)).height(pcMaxHeight);
-		}
+		pc.height(pcMaxHeight);
 		
 		var socket = io.connect(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/');
 		socket.on('donation', function(donation){
