@@ -23,9 +23,9 @@ mixin projectInfo(p)
 				img.projectimg(src="#{p.imageUrl}")
 		div.counter.large.total #{p.total}
 		div.center.fs24 #{p.currency}
-		div.center.fs16.margin-top20.notes
+		div.center.fs16.margin-top10.notes
 			!= p.notes
-		div.center.fs16.margin-top20 Budget du projet
+		div.center.fs16.margin-top10 Budget du projet
 		div.counter.small
 			- if (p.target)
 				| #{p.target} #{p.currency}
