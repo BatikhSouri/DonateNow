@@ -1,9 +1,9 @@
 mixin project(p, projectsListLength)
 	- if (projectsListLength == 1)
-		.col-xs-12
+		.col-xs-4.col-xs-offset-4
 			+projectInfo(p)
 	- else if (projectsListLength == 2)
-		.col-xs-6
+		.col-xs-4.col-xs-offset-2
 			+projectInfo(p)
 	- else if (projectsListLength == 3)
 		.col-xs-4
